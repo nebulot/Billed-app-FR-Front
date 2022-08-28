@@ -19,9 +19,28 @@ const row = (bill) => {
     `)
   }
 
+  /*add anti chrono*/
+
+  const antiChrono = (a, b) => {
+    if(a.rawDate) {
+      return a.rawDate < b.rawDate ? 1 : -1
+    }
+    return a.date < b.date ? 1 : -1
+  }
+
+
+/**
+ * take array of bills, sort them in reverse chronological order, 
+ * and the map each bill to a row of html => container/bills
+ * @param data the data to be use to populate the table
+ * @returns a string of html
+ */
+
 const rows = (data) => {
-  return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
+ // return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
+ return (data && data.length) ? data.sort(antiChrono).map(bill => row(bill)).join("") : ""
 }
+
 
 export default ({ data: bills, loading, error }) => {
   
