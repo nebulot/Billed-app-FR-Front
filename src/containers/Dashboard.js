@@ -5,6 +5,14 @@ import { ROUTES_PATH } from '../constants/routes.js'
 import USERS_TEST from '../constants/usersTest.js'
 import Logout from "./Logout.js"
 
+/**
+ * it filters the bills based on the status and the user's email 
+ * @param  data the data to be filtered
+ * @param  status the status of the bill 
+ * @returns an array of bills + status of arguments
+ */
+
+
 export const filteredBills = (data, status) => {
   return (data && data.length) ?
     data.filter(bill => {
@@ -26,6 +34,12 @@ export const filteredBills = (data, status) => {
       return selectCondition
     }) : []
 }
+
+/**
+ * It take a bill object and returns string of html => bill card
+ * @param bill bill object
+ * @returns  string of html 
+ */
 
 export const card = (bill) => {
   const firstAndLastNames = bill.email.split('@')[0]
@@ -52,10 +66,21 @@ export const card = (bill) => {
   `)
 }
 
+/**
+ * It take an array of bills and return html
+ * @param b an array of bill objects
+ * @returns a string of html elements
+ */
+
 export const cards = (bills) => {
   return bills && bills.length ? bills.map(bill => card(bill)).join("") : ""
 }
 
+/**
+ * it takes an index and return a status
+ * @param  index  the index of the status
+ * @returns the status of the request
+ */
 export const getStatus = (index) => {
   switch (index) {
     case 1:
@@ -67,6 +92,7 @@ export const getStatus = (index) => {
   }
 }
 
+/* class exported by default*/
 export default class {
   constructor({ document, onNavigate, store, bills, localStorage }) {
     this.document = document
@@ -78,6 +104,7 @@ export default class {
     new Logout({ localStorage, onNavigate })
   }
 
+  /*function is called when user click on the eye icon*/
   handleClickIconEye = () => {
     const billUrl = $('#icon-eye-d').attr("data-bill-url")
     const imgWidth = Math.floor($('#modaleFileAdmin1').width() * 0.8)
@@ -85,7 +112,16 @@ export default class {
     if (typeof $('#modaleFileAdmin1').modal === 'function') $('#modaleFileAdmin1').modal('show')
   }
 
+  /**
+   * it handles the click event on the bill's edit btn
+   * add l124 console.log bill and bills
+   * @param {*} e event
+   * @param {*} bill  bill object
+   * @param {*} bills  an array of objects
+   */
+
   handleEditTicket(e, bill, bills) {
+    console.log({bill, bills})
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     if (this.counter % 2 === 0) {
@@ -110,6 +146,7 @@ export default class {
     $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
   }
 
+  /*function called when user click on the accept btn*/
   handleAcceptSubmit = (e, bill) => {
     const newBill = {
       ...bill,
@@ -120,6 +157,7 @@ export default class {
     this.onNavigate(ROUTES_PATH['Dashboard'])
   }
 
+  /*function called when user click on the refused btn*/
   handleRefuseSubmit = (e, bill) => {
     const newBill = {
       ...bill,
@@ -129,6 +167,16 @@ export default class {
     this.updateBill(newBill)
     this.onNavigate(ROUTES_PATH['Dashboard'])
   }
+
+  /**
+   * function is called when a user click on status header
+   * double click will hide the ticket associated whith status 
+   * if not show the tickets associated with status
+   * @param {*} e event
+   * @param {*} bills  array of objects with all information about bill
+   * @param {*} index index of the status btn 
+   * @returns bills array is being returned
+   */
 
   handleShowTickets(e, bills, index) {
     if (this.counter === undefined || this.index !== index) this.counter = 0
@@ -146,6 +194,7 @@ export default class {
     }
 
     bills.forEach(bill => {
+      console.log({index})
       $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
 
@@ -153,6 +202,7 @@ export default class {
 
   }
 
+  /*function return a promise*/
   getBillsAllUsers = () => {
     if (this.store) {
       return this.store
@@ -176,6 +226,7 @@ export default class {
 
   // not need to cover this function by tests
   /* istanbul ignore next */
+  /*updating the bill in the database*/
   updateBill = (bill) => {
     if (this.store) {
     return this.store

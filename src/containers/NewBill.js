@@ -1,6 +1,7 @@
 import { ROUTES_PATH } from '../constants/routes.js'
 import Logout from "./Logout.js"
 
+/*class create a new bill*/
 export default class NewBill {
   constructor({ document, onNavigate, store, localStorage }) {
     this.document = document
@@ -15,6 +16,9 @@ export default class NewBill {
     this.billId = null
     new Logout({ document, localStorage, onNavigate })
   }
+
+  /*function called when the form is submit*/
+  /*reload page, and a bill object with value of the form and call the updateBill function*/
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
@@ -40,6 +44,10 @@ export default class NewBill {
         this.fileName = fileName
       }).catch(error => console.error(error))
   }
+
+  /*function called chen the form is submited*/
+  /*reload page*/
+/* create a bill object with form values and call the updateBill function*/
   handleSubmit = e => {
     e.preventDefault()
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
@@ -62,6 +70,7 @@ export default class NewBill {
   }
 
   // not need to cover this function by tests
+  /*updating the bill in the database*/
   updateBill = (bill) => {
     if (this.store) {
       this.store
