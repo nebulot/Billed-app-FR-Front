@@ -212,6 +212,8 @@ describe('Given I am connected as Admin, and I am on Dashboard page, and I click
   })
 })
 
+//test get
+
 describe('Given I am connected as Admin and I am on Dashboard page and I clicked on a bill', () => {
   describe('When I click on the icon eye', () => {
     test('A modal should open', () => {
