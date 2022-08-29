@@ -19,7 +19,7 @@ import Bills from "../containers/Bills.js";
 import { ROUTES, ROUTES_PATH } from "../constants/routes.js";
 import { localStorageMock } from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store";
-import { bills } from "../fixtures/bills.js";
+import { billsfix } from "../fixtures/bills.js";
 import router from "../app/Router.js";
 
 jest.mock("../app/Store", () => mockStore);
@@ -27,8 +27,20 @@ jest.mock("../app/Store", () => mockStore);
 /*test get*/
 
 describe("Given I am connected as an employee", () => {
+  describe("When page it is loading", () => {
+    test("Then, Loading page should be rendered", () => {
+      document.body.innerHTML = BillsUI({ loading: true });
+      expect(screen.getAllByText("Loading...")).toBeTruthy();
+    });
+  });
+  describe("When page back-end send an error message", () => {
+    test("Then, Error page should be rendered", () => {
+      document.body.innerHTML = BillsUI({ error: "some error message" });
+      expect(screen.getAllByText("Erreur")).toBeTruthy();
+    });
+  });
   describe("When I am on Bills Page", () => {
-    test("Then bill icon in vertical layout should be highlighted", async () => {
+    beforeEach(() => {
       Object.defineProperty(window, "localStorage", {
         value: localStorageMock,
       });
@@ -38,6 +50,11 @@ describe("Given I am connected as an employee", () => {
           type: "Employee",
         })
       );
+      //document.body.innerHTML = BillsUI({ data: billsFix })
+    });
+
+    //test bill icon in vertical layout
+    test("Then bill icon in vertical layout should be highlighted", async () => {
       const root = document.createElement("div");
       root.setAttribute("id", "root");
       document.body.append(root);
@@ -45,14 +62,12 @@ describe("Given I am connected as an employee", () => {
       window.onNavigate(ROUTES_PATH.Bills);
       await waitFor(() => screen.getByTestId("icon-window"));
       const windowIcon = screen.getByTestId("icon-window");
-      //to-do write expect expression add expect
-      expect(
-        screen.getByTestId("icon-window").classList.contains("active-icon")
-      ).toBe(true); // vérifie si l'icone est en surbrillance
+      //to-do write expect expression
+      expect(windowIcon.classList.contains("active-icon")).toBe(true);
     });
-
+    //test bills should be ordered its the same change just bills on billsFix
     test("Then bills should be ordered from earliest to latest", () => {
-      document.body.innerHTML = BillsUI({ data: bills });
+      document.body.innerHTML = BillsUI({ data: billsFix });
       const dates = screen
         .getAllByText(
           /^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i
@@ -62,19 +77,48 @@ describe("Given I am connected as an employee", () => {
       const datesSorted = [...dates].sort(antiChrono);
       expect(dates).toEqual(datesSorted);
     });
-  });
-});
+    // add test click on icon eye
+    test("Then clic on one of iconEye, the modal should be displayed", () => {
+      document.body.innerHTML = BillsUI({ data: billsfix });
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname });
+      };
+      const store = null;
+      const bills = new Bills({
+        document,
+        onNavigate,
+        store,
+        bills: billsfix,
+        localStorage: window.localStorage,
+      });
+      const handleClickIconEye = jest.fn(bills.handleClickIconEye);
+      const eye = screen.getAllByTestId("icon-eye");
+      eye[0].addEventListener("click", handleClickIconEye);
+      userEvent.click(eye[0]);
+      expect(handleClickIconEye).toHaveBeenCalled();
+      const modale = screen.getByTestId("modaleFile");
+      expect(modale).toBeTruthy();
+    });
 
-describe("When page it is loading", () => {
-  test("Then, Loading page should be rendered", () => {
-    document.body.innerHTML = BillsUI({ loading: true });
-    expect(screen.getAllByText("Loading...")).toBeTruthy();
-  });
-});
-describe("When page back-end send an error message", () => {
-  test("Then, Error page should be rendered", () => {
-    document.body.innerHTML = BillsUI({ error: "some error message" });
-    expect(screen.getAllByText("Erreur")).toBeTruthy();
+    //add test click on btn new bill
+    test("Then clic on button newBill the newBill page be displayed", () => {
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname });
+      };
+      const store = jest.fn();
+      const bills = new Bills({
+        document,
+        onNavigate,
+        store,
+        localStorage: window.localStorage,
+      });
+      const handleClickNewBill = jest.fn(bills.handleClickNewBill);
+      const buttonNewBill = screen.getByTestId("btn-new-bill");
+      buttonNewBill.addEventListener("click", handleClickNewBill);
+      userEvent.click(buttonNewBill);
+      expect(handleClickNewBill).toHaveBeenCalled();
+      expect(screen.getByTestId("form-new-bill")).toBeTruthy();
+    });
   });
 });
 
@@ -115,6 +159,8 @@ describe("Given I am a user connected as Employee", () => {
         root.setAttribute("id", "root");
         document.body.appendChild(root);
         router();
+        //window on navigate
+        window.onNavigate(ROUTES_PATH.Bills);
       });
       test("fetches bills from an API and fails with 404 message error", async () => {
         mockStore.bills.mockImplementationOnce(() => {
