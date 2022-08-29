@@ -10,7 +10,7 @@ import Dashboard, { filteredBills, cards } from "../containers/Dashboard.js"
 import { ROUTES, ROUTES_PATH } from "../constants/routes"
 import { localStorageMock } from "../__mocks__/localStorage.js"
 import mockStore from "../__mocks__/store"
-import { bills } from "../fixtures/bills"
+import { billsFix } from "../fixtures/bills"
 import router from "../app/Router"
 
 jest.mock("../app/Store", () => mockStore)
@@ -18,19 +18,19 @@ jest.mock("../app/Store", () => mockStore)
 describe('Given I am connected as an Admin', () => {
   describe('When I am on Dashboard page, there are bills, and there is one pending', () => {
     test('Then, filteredBills by pending status should return 1 bill', () => {
-      const filtered_bills = filteredBills(bills, "pending")
+      const filtered_bills = filteredBills(billsFix, "pending")
       expect(filtered_bills.length).toBe(1)
     })
   })
   describe('When I am on Dashboard page, there are bills, and there is one accepted', () => {
     test('Then, filteredBills by accepted status should return 1 bill', () => {
-      const filtered_bills = filteredBills(bills, "accepted")
+      const filtered_bills = filteredBills(billsFix, "accepted")
       expect(filtered_bills.length).toBe(1)
     })
   })
   describe('When I am on Dashboard page, there are bills, and there is two refused', () => {
     test('Then, filteredBills by accepted status should return 2 bills', () => {
-      const filtered_bills = filteredBills(bills, "refused")
+      const filtered_bills = filteredBills(billsFix, "refused")
       expect(filtered_bills.length).toBe(2)
     })
   })
@@ -60,13 +60,13 @@ describe('Given I am connected as an Admin', () => {
       }))
 
       const dashboard = new Dashboard({
-        document, onNavigate, store: null, bills:bills, localStorage: window.localStorage
+        document, onNavigate, store: null, bills:billsFix, localStorage: window.localStorage
       })
-      document.body.innerHTML = DashboardUI({ data: { bills } })
+      document.body.innerHTML = DashboardUI({ data: { billsFix } })
 
-      const handleShowTickets1 = jest.fn((e) => dashboard.handleShowTickets(e, bills, 1))
-      const handleShowTickets2 = jest.fn((e) => dashboard.handleShowTickets(e, bills, 2))
-      const handleShowTickets3 = jest.fn((e) => dashboard.handleShowTickets(e, bills, 3))
+      const handleShowTickets1 = jest.fn((e) => dashboard.handleShowTickets(e, billsFix, 1))
+      const handleShowTickets2 = jest.fn((e) => dashboard.handleShowTickets(e, billsFix, 2))
+      const handleShowTickets3 = jest.fn((e) => dashboard.handleShowTickets(e, billsFix, 3))
 
       const icon1 = screen.getByTestId('arrow-icon1')
       const icon2 = screen.getByTestId('arrow-icon2')
@@ -104,10 +104,10 @@ describe('Given I am connected as an Admin', () => {
       }))
 
       const dashboard = new Dashboard({
-        document, onNavigate, store: null, bills:bills, localStorage: window.localStorage
+        document, onNavigate, store: null, bills:billsFix, localStorage: window.localStorage
       })
-      document.body.innerHTML = DashboardUI({ data: { bills } })
-      const handleShowTickets1 = jest.fn((e) => dashboard.handleShowTickets(e, bills, 1))
+      document.body.innerHTML = DashboardUI({ data: { billsFix } })
+      const handleShowTickets1 = jest.fn((e) => dashboard.handleShowTickets(e, billsFix, 1))
       const icon1 = screen.getByTestId('arrow-icon1')
       icon1.addEventListener('click', handleShowTickets1)
       userEvent.click(icon1)
@@ -132,11 +132,11 @@ describe('Given I am connected as an Admin', () => {
       }))
 
       const dashboard = new Dashboard({
-        document, onNavigate, store: null, bills:bills, localStorage: window.localStorage
+        document, onNavigate, store: null, bills:billsFix, localStorage: window.localStorage
       })
-      document.body.innerHTML = DashboardUI({ data: { bills } })
+      document.body.innerHTML = DashboardUI({ data: { billsFix } })
 
-      const handleShowTickets1 = jest.fn((e) => dashboard.handleShowTickets(e, bills, 1))
+      const handleShowTickets1 = jest.fn((e) => dashboard.handleShowTickets(e, billsFix, 1))
       const icon1 = screen.getByTestId('arrow-icon1')
       icon1.addEventListener('click', handleShowTickets1)
       userEvent.click(icon1)
@@ -167,18 +167,18 @@ describe('Given I am connected as Admin, and I am on Dashboard page, and I click
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Admin'
       }))
-      document.body.innerHTML = DashboardFormUI(bills[0])
+      document.body.innerHTML = DashboardFormUI(billsFix[0])
 
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
       const store = null
       const dashboard = new Dashboard({
-        document, onNavigate, store, bills, localStorage: window.localStorage
+        document, onNavigate, store, billsFix, localStorage: window.localStorage
       })
 
       const acceptButton = screen.getByTestId("btn-accept-bill-d")
-      const handleAcceptSubmit = jest.fn((e) => dashboard.handleAcceptSubmit(e, bills[0]))
+      const handleAcceptSubmit = jest.fn((e) => dashboard.handleAcceptSubmit(e, billsFix[0]))
       acceptButton.addEventListener("click", handleAcceptSubmit)
       fireEvent.click(acceptButton)
       expect(handleAcceptSubmit).toHaveBeenCalled()
@@ -192,17 +192,17 @@ describe('Given I am connected as Admin, and I am on Dashboard page, and I click
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Admin'
       }))
-      document.body.innerHTML = DashboardFormUI(bills[0])
+      document.body.innerHTML = DashboardFormUI(billsFix[0])
 
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
       const store = null
       const dashboard = new Dashboard({
-        document, onNavigate, store, bills, localStorage: window.localStorage
+        document, onNavigate, store, billsFix, localStorage: window.localStorage
       })
       const refuseButton = screen.getByTestId("btn-refuse-bill-d")
-      const handleRefuseSubmit = jest.fn((e) => dashboard.handleRefuseSubmit(e, bills[0]))
+      const handleRefuseSubmit = jest.fn((e) => dashboard.handleRefuseSubmit(e, billsFix[0]))
       refuseButton.addEventListener("click", handleRefuseSubmit)
       fireEvent.click(refuseButton)
       expect(handleRefuseSubmit).toHaveBeenCalled()
@@ -221,13 +221,13 @@ describe('Given I am connected as Admin and I am on Dashboard page and I clicked
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Admin'
       }))
-      document.body.innerHTML = DashboardFormUI(bills[0])
+      document.body.innerHTML = DashboardFormUI(billsFix[0])
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
       const store = null
       const dashboard = new Dashboard({
-        document, onNavigate, store, bills, localStorage: window.localStorage
+        document, onNavigate, store, billsFix, localStorage: window.localStorage
       })
 
       const handleClickIconEye = jest.fn(dashboard.handleClickIconEye)
