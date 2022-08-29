@@ -89,7 +89,7 @@ describe("Given I am connected as an employee", () => {
         onNavigate,
         store,
         bills: billsfix,
-        localStorage: window.localStorage,
+        localStorage: window.localStorage
       });
       const handleClickIconEye = jest.fn(bills.handleClickIconEye);
       const eye = screen.getAllByTestId("icon-eye");
@@ -98,7 +98,7 @@ describe("Given I am connected as an employee", () => {
       expect(handleClickIconEye).toHaveBeenCalled();
       const modale = screen.getByTestId("modaleFile");
       expect(modale).toBeTruthy();
-});
+    });
 
     //add test click on btn new bill
     test("Then clic on button newBill the newBill page be displayed", () => {
