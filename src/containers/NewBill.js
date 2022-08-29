@@ -30,6 +30,7 @@ export default class NewBill {
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
     formData.append('email', email)
+    console.log(formData)
 
     this.store
       .bills()
@@ -45,6 +46,7 @@ export default class NewBill {
         this.fileUrl = fileUrl
         this.fileName = fileName
       }).catch(error => console.error(error))
+      console.log(this.store)
   }
 
   /*function called chen the form is submited*/
@@ -67,7 +69,10 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
+    //add date and value uploading
+    this.updateBill(bill.date.value);
     this.updateBill(bill)
+    
     this.onNavigate(ROUTES_PATH['Bills'])
   }
 
