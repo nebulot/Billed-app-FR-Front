@@ -67,7 +67,7 @@ describe("Given I am connected as an employee", () => {
     });
     //test bills should be ordered its the same change just bills on billsFix
     test("Then bills should be ordered from earliest to latest", () => {
-      document.body.innerHTML = BillsUI({ data: billsFix });
+      document.body.innerHTML = BillsUI({ data: billsfix });
       const dates = screen
         .getAllByText(
           /^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i
@@ -98,7 +98,7 @@ describe("Given I am connected as an employee", () => {
       expect(handleClickIconEye).toHaveBeenCalled();
       const modale = screen.getByTestId("modaleFile");
       expect(modale).toBeTruthy();
-    });
+});
 
     //add test click on btn new bill
     test("Then clic on button newBill the newBill page be displayed", () => {
