@@ -12,7 +12,7 @@ import {localStorageMock} from "../__mocks__/localStorage.js";
 
 import router from "../app/Router.js";*/
 
-import { fireEvent, screen, waitFor } from "@testing-library/dom";
+import { screen, waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import BillsUI from "../views/BillsUI.js";
 import Bills from "../containers/Bills.js";
