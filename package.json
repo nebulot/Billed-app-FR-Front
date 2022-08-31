@@ -2,7 +2,7 @@
   "scripts": {
     "test": "jest --coverage --noStackTrace --silent",
     "test:watch": "jest --watchAll --coverage --noStackTrace --silent",
-    "Bills": "jest src/__tests__/Bills.js",
+    "bills": "jest src/__tests__/Bills.js",
     "new-bill": "jest src/__tests__/NewBill.js"
   },
   "jest": {
