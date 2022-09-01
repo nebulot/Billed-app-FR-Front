@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "jest --coverage --noStackTrace --silent",
+    "test": "jest --coverage",
     "test:watch": "jest --watchAll --coverage --noStackTrace --silent",
     "bills": "jest src/__tests__/Bills.js",
     "new-bill": "jest src/__tests__/NewBill.js"
